@@ -3,9 +3,9 @@ from tkinter import ttk
 import sv_ttk
 
 class Flip:
-"""
-Flip class to create Flip objects which contain flashcards
-"""
+	"""
+	Flip class to create Flip objects which contain flashcards
+	"""
 	def __init__(self, name):
 		"""
 		Initializes attributes
