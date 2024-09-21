@@ -3,7 +3,15 @@ from tkinter import ttk
 import sv_ttk
 
 class Flip:
+"""
+Flip class to create Flip objects which contain flashcards
+"""
 	def __init__(self, name):
+		"""
+		Initializes attributes
+
+		name: string name of the Flip
+		"""
 		self.name = name
 		self.cards = {}
 
@@ -24,6 +32,8 @@ class Flip:
 	def set_name(self, new_name):
 		"""
 		Sets a new name for the Flip
+
+		new_name: string of the Flip's new name
 		"""
 		self.name = new_name
 
@@ -54,7 +64,7 @@ class Flip:
 
 	def cycle(self):
 		"""
-		Runs a flip cycle through all cards currently in the Flip
+		Terminal-based flashcard viewer
 		"""
 		print("Press Enter to flip.")
 		print("Type 'n'/'p' for next/previous card.")
@@ -90,11 +100,20 @@ class Flip:
 				front = not front # Flipping card
 
 	def save_contents(self):
+		"""
+		Saves word contents to json file
+		"""
 		f = open(self.name+".json", "w")
 		for k in self.cards.keys():
 			f.write(f'{k} : {self.cards[k]}\n')
 
 	def flip_display(self, root, menu):
+		"""
+		Creates flashcard display of the Flip
+
+		root: Tkinter root of program
+		menu: Tkinter selection window
+		"""
 		menu.update()
 		menu.destroy()
 
@@ -102,15 +121,28 @@ class Flip:
 		click_y = 0
 
 		def close_flip():
+			"""
+			Closes Flip display
+			"""
 			self.is_displayed = False
 			window.destroy()
 
 		def save_click_position(event):
+			"""
+			Saves last mouse click position on display
+
+			event: tkinter event
+			"""
 			nonlocal click_x, click_y
 			click_x = event.x
 			click_y = event.y
 
 		def dragging(event):
+			"""
+			Updates display position from mouse drag
+
+			event: tkinter event
+			"""
 			nonlocal click_x, click_y
 			x = event.x - click_x
 			y = event.y - click_y
@@ -124,6 +156,9 @@ class Flip:
 		text = "There are no cards in this deck."
 		front = True
 		def flip_card():
+			"""
+			Updates Flashcard text with corresponding word pair
+			"""
 			nonlocal front, card_index
 			front = not front
 			if len(self.cards) > 0:
@@ -134,18 +169,27 @@ class Flip:
 				flashcard.configure(text=text)
 
 		def update_card():
+			"""
+			Updates Flashcard text to front word of current word index
+			"""
 			nonlocal front, card_index
 			front = True
 			text = card_list[card_index]
 			flashcard.configure(text=text)
 
 		def move_left():
+			"""
+			Moves card index left if possible
+			"""
 			nonlocal card_index
 			if card_index > 0:
 				card_index -= 1
 				update_card()
 
 		def move_right():
+			"""
+			Moves card index right if possible
+			"""
 			nonlocal card_index
 			if card_index < len(self.cards) - 1:
 				card_index += 1

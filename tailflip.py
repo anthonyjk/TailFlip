@@ -10,8 +10,15 @@ click_x = 0
 click_y = 0
 
 def open_flip():
-
+	"""
+	Creates selection menu for Flip options to display
+	"""
 	def chosen_flip(event):
+		"""
+		Opens selected Flip display
+
+		event: tkinter event
+		"""
 		widget = event.widget
 		s_i = int(widget.curselection()[0]) # Select index
 		name = widget.get(s_i)
@@ -32,24 +39,39 @@ def open_flip():
 	flip_select.bind('<<ListboxSelect>>', chosen_flip)
 
 def create_flip(name):
+	"""
+	Creates a new Flip object
+
+	name: string name of new Flip object
+	"""
 	if name not in list(flips.keys()):
 		flips[name] = Flip(name)
 	else:
 		print("Already exists") # Give an error message
 	print(flips)
 
-# Modify Flip Window
 def flip_customize_window():
+	"""
+	Opens Flip customization window
+	"""
 
-	# Create Flip pop up
 	def pop_up_input():
+		"""
+		Creates text input window for new Flip creation
+		"""
 
 		def create_close():
+			"""
+			Creates new Flip and closes Flip creation window
+			"""
 			create_flip(input_text.get())
 			update_list()
 			pop.destroy()
 
 		def cancel_close():
+			"""
+			closes Flip creation window without creating new Flip
+			"""
 			pop.destroy()
 
 		pop = tkinter.Toplevel(root)
@@ -70,10 +92,16 @@ def flip_customize_window():
 	contents = None # Setting up contents here so that the same window can be used
 	word_list = None # To be accessed by both contents and create windows.
 	def contents_window(name, first_load):
+		"""
+		Opens Flip contents window
+
+		name: string name of Flip to be customized
+		first_load: boolean if first open of contents window
+		"""
 		nonlocal contents, word_list
 
 		def word_select(event):
-			pass
+			pass # TODO
 
 		if first_load:
 			contents = tkinter.Toplevel(window)
@@ -95,9 +123,18 @@ def flip_customize_window():
 
 	create = None
 	def card_create_window(name, first_load):
+		"""
+		Opens Flip card creation window
+
+		name: string name of Flip to be customized
+		first_load: boolean if first open of creation window
+		"""
 		nonlocal create, word_list
 
 		def add_new_card():
+			"""
+			Adds new card to Flip object
+			"""
 			flips[name].add_card([front_text.get(), back_text.get()])
 			length = len(flips[name].get_cards())
 			word_list.insert(length, front_text.get())
@@ -117,6 +154,9 @@ def flip_customize_window():
 		add_button.grid(row=2)
 
 	def update_list():
+		"""
+		Adds new Flip to flip_list listbox
+		"""
 		nonlocal index
 		flip_names = list(flips.keys())
 		flip_list.insert(index+1, flip_names[index])
@@ -125,6 +165,11 @@ def flip_customize_window():
 	select_i = -1
 	first_load = True # First load of contents_window and card_create_window
 	def on_select(event):
+		"""
+		Creates content and creation window of selected Flip from flip_list
+
+		event: tkinter event
+		"""
 		nonlocal select_i, first_load
 
 		widget = event.widget
@@ -160,11 +205,21 @@ def flip_customize_window():
 
 
 def save_click_position(event):
+	"""
+	Saves last mouse click position on display
+
+	event: tkinter event
+	"""
 	global click_x, click_y
 	click_x = event.x
 	click_y = event.y
 
 def dragging(event):
+	"""
+	Updates display position from mouse drag
+
+	event: tkinter event
+	"""
 	global click_x, click_y
 	x = event.x - click_x
 	y = event.y - click_y
