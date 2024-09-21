@@ -2,7 +2,7 @@ import tkinter
 from tkinter import ttk
 import sv_ttk
 
-class Deck:
+class Flip:
 	def __init__(self, name):
 		self.name = name
 		self.cards = {}
@@ -17,19 +17,19 @@ class Deck:
 
 	def get_name(self):
 		"""
-		Returns deck name
+		Returns Flip name
 		"""
 		return self.name
 
 	def set_name(self, new_name):
 		"""
-		Sets a new name for the deck
+		Sets a new name for the Flip
 		"""
 		self.name = new_name
 
 	def add_card(self, card):
 		"""
-		Adds a new card to the deck
+		Adds a new card to the Flip
 
 		card: array of size 2, [front_val, back_val]
 		"""
@@ -37,7 +37,7 @@ class Deck:
 
 	def remove_card(self, card):
 		"""
-		Removes a card from the deck
+		Removes a card from the Flip
 
 		card: front value of card to be removed
 		"""
@@ -45,16 +45,16 @@ class Deck:
 
 	def contents(self):
 		"""
-		Prints the front and back of every card in the deck
+		Prints the front and back of every card in the Flip
 		"""
-		print(f'Deck: {self.name}')
+		print(f'Flip: {self.name}')
 
 		for k in self.cards.keys():
 			print(f'{k} : {self.cards[k]}')
 
 	def cycle(self):
 		"""
-		Runs a flip cycle through all cards currently in the deck
+		Runs a flip cycle through all cards currently in the Flip
 		"""
 		print("Press Enter to flip.")
 		print("Type 'n'/'p' for next/previous card.")
@@ -94,11 +94,14 @@ class Deck:
 		for k in self.cards.keys():
 			f.write(f'{k} : {self.cards[k]}\n')
 
-	def deck_display(self, root):
+	def flip_display(self, root, menu):
+		menu.update()
+		menu.destroy()
+
 		click_x = 0
 		click_y = 0
 
-		def close_deck():
+		def close_flip():
 			self.is_displayed = False
 			window.destroy()
 
@@ -116,14 +119,37 @@ class Deck:
 			new_geom = f"+{new_x}+{new_y}"
 			window.geometry(new_geom)
 
+		card_index = 0
+		card_list = list(self.cards.keys())
+		text = "There are no cards in this deck."
 		front = True
-		def change_txt():
-			nonlocal front
+		def flip_card():
+			nonlocal front, card_index
 			front = not front
-			if front:
-				flashcard.configure(text="fa")
-			else:
-				flashcard.configure(text="tree")
+			if len(self.cards) > 0:
+				if front:
+					text = card_list[card_index]
+				else:
+					text = self.cards[card_list[card_index]]
+				flashcard.configure(text=text)
+
+		def update_card():
+			nonlocal front, card_index
+			front = True
+			text = card_list[card_index]
+			flashcard.configure(text=text)
+
+		def move_left():
+			nonlocal card_index
+			if card_index > 0:
+				card_index -= 1
+				update_card()
+
+		def move_right():
+			nonlocal card_index
+			if card_index < len(self.cards) - 1:
+				card_index += 1
+				update_card()
 
 		if self.is_displayed == False:
 			self.is_displayed = True
@@ -132,15 +158,27 @@ class Deck:
 			style = ttk.Style(window)
 
 			style.configure('card.TButton', font=('Helvetica',  24), relief='flat')
+			style.configure('arrow.TButton', relief='flat')
 
-			exit_btn = ttk.Button(window, text="Exit", command=close_deck)
-			exit_btn.pack()
+			exit_btn = ttk.Button(window, text="Exit", command=close_flip)
+			exit_btn.grid(row=0, column=0, sticky='w')
 
-			flashcard = ttk.Button(window, text="fa", command=change_txt, style='card.TButton', takefocus=False)
-			flashcard.pack(fill = 'both', ipady=200)
+			left_btn = ttk.Button(window, text="<", style='arrow.TButton', takefocus=False, command=move_left)
+			left_btn.grid(row=0, column=2, sticky='e')
 
-			window.overrideredirect(True)
-			window.geometry("600x300+500+300")
+			right_btn = ttk.Button(window, text=">", style='arrow.TButton', takefocus=False, command=move_right)
+			right_btn.grid(row=0, column=3, sticky='e')
+
+			window.grid_rowconfigure(1, weight=1)
+			window.grid_columnconfigure(2, weight=1)
+
+			if len(self.cards) > 0:
+				text = card_list[card_index]
+			flashcard = ttk.Button(window, text=text, command=flip_card, style='card.TButton', takefocus=False)
+			flashcard.grid(row=1, column=0, columnspan=4, sticky='nesw')
+
+			window.overrideredirect(True) # TODO: Add frame to let user resize flip.
+			window.geometry("500x300+500+300")
 			window.bind('<Button-1>', save_click_position)
 			window.bind('<B1-Motion>', dragging)
 			window.mainloop()
