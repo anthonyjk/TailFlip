@@ -1,0 +1,33 @@
+TailFlip TODO
+
+- Rename & Delete existing Flips
+
+- Scrollbar for Listboxes?
+	- (Technically can already scroll?)
+- Save & Load Feature for Flips
+	- Save when "Open Flip" is pressed?
+	- Load on launch from specified folder?
+- Fit longer text in flashcards (such as whole sentences).
+- Streamline word display menu listbox
+- Add card count to Flip display (ex: 3 / 17)
+- Image support for cards
+	- Drawing support?
+- Flip games (pygame?)
+	- Typing game
+	- Matching game?
+	- Learn game?
+		- duplicate reverse cards
+	- Collect data & visualize
+- Track user data for visualizations
+	- Cards flipped per day
+- Pin feature for active Flip displays
+- Replace Flip selection menu with folder and file selection system
+- Logo
+- Custom themes
+
+DONE
+- Fix card update visual bug
+- Focus other tabs with each other
+- default to creating card after updating card
+- Dragging does not apply when entry box is focused
+- Delete Card option

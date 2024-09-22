@@ -107,6 +107,9 @@ def flip_customize_window():
 
 		#pop.overrideredirect(True)
 
+	def delete_flip():
+		pass
+
 	word_list = None # To be accessed by both contents and create windows.
 	front_input = None
 	back_input = None
@@ -200,10 +203,35 @@ def flip_customize_window():
 					back_input.delete(0, tkinter.END)
 					back_input.insert(0, "")
 			elif add_button.cget('text') == 'Update':
-				print(name)
-				flips[name].replace_card(old_card, [front_text.get(), back_text.get()])
-				word_list.delete(replace_index, tkinter.END)
-				word_list.insert(replace_index, f'{front_text.get()} | {back_text.get()}')
+				if old_card != '':
+					flips[name].replace_card(old_card, [front_text.get(), back_text.get()], replace_index)
+					word_list.delete(replace_index)
+					word_list.insert(replace_index, f'{front_text.get()} | {back_text.get()}')
+
+					# Reset back to adding a card
+					front_input.delete(0, tkinter.END)
+					front_input.insert(0, "")
+
+					back_input.delete(0, tkinter.END)
+					back_input.insert(0, "")
+
+					add_button.config(text='Add')
+
+		def remove_card():
+			nonlocal old_card
+			if old_card != '':
+				flips[name].remove_card(old_card)
+				word_list.delete(replace_index)
+
+				front_input.delete(0, tkinter.END)
+				front_input.insert(0, "")
+
+				back_input.delete(0, tkinter.END)
+				back_input.insert(0, "")
+
+				add_button.config(text='Add')
+				old_card = ''
+
 
 		if first_load:
 			create = tkinter.Toplevel(window)
@@ -219,6 +247,9 @@ def flip_customize_window():
 
 		add_button = ttk.Button(create, text="Add", command=add_new_card)
 		add_button.grid(row=2, sticky='we')
+
+		delete_button = ttk.Button(create, text="Delete", command=remove_card)
+		delete_button.grid(row=3, sticky='we')
 
 		create.bind('<Button-1>', save_click_position)
 		create.bind('<B1-Motion>', window_dragging)
@@ -260,6 +291,10 @@ def flip_customize_window():
 
 		event: tkinter event
 		"""
+		selected_widget = event.widget.focus_get()
+		if isinstance(selected_widget, tkinter.Entry):
+			return "break"
+
 		global click_x, click_y, contents, create
 		x = event.x - click_x
 		y = event.y - click_y
@@ -291,12 +326,16 @@ def flip_customize_window():
 
 	window.grid_columnconfigure(0, weight=1)
 	window.grid_rowconfigure(1, weight=1)
+	window.grid_rowconfigure(2, weight=1)
 
 	create_button = ttk.Button(window, text='Create Flip', command=pop_up_input)
 	create_button.grid(row=0)
 
+	flip_delete_button = ttk.Button(window, text='Delete Flip', command=delete_flip)
+	flip_delete_button.grid(row=1)
+
 	flip_list = tkinter.Listbox(window, exportselection=False)
-	flip_list.grid(row=1, sticky='wes')
+	flip_list.grid(row=2, sticky='wes')
 
 	flip_list.bind('<<ListboxSelect>>', on_select)
 
@@ -318,6 +357,17 @@ def save_click_position(event):
 	global click_x, click_y
 	click_x = event.x
 	click_y = event.y
+	root.focus_set()
+	try:
+		window.focus_set()
+		try:
+			contents.focus_set()
+			create.focus_set()
+		except:
+			pass
+	except:
+		pass
+	event.widget.focus_set()
 
 def root_dragging(event):
 	"""

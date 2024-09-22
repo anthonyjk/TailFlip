@@ -45,18 +45,20 @@ class Flip:
 		"""
 		self.cards[card[0]] = card[1]
 
-	def replace_card(self, old_card, new_card):
+	def replace_card(self, old_card, new_card, replace_index):
 		"""
 		Replaces existing card in Flip
 
 		old_card: string with front_val of self.cards element
 		new_card: array of size 2, [front_val, back_val]
+		replace_index: index to put new value in dict item tuple
 		"""
-		print(old_card)
 		if old_card in list(self.cards.keys()):
-			print("RAN")
 			self.cards.pop(old_card)
-			self.cards[new_card[0]] = new_card[1]
+
+			card_items = list(self.cards.items())
+			card_items.insert(replace_index-1, (new_card[0], new_card[1]))
+			self.cards = dict(card_items)
 
 	def remove_card(self, card):
 		"""
@@ -217,7 +219,7 @@ class Flip:
 			style.configure('card.TButton', font=('Helvetica',  24), relief='flat')
 			style.configure('arrow.TButton', relief='flat')
 
-			exit_btn = ttk.Button(window, text="Exit", command=close_flip)
+			exit_btn = ttk.Button(window, text="Close", command=close_flip)
 			exit_btn.grid(row=0, column=0, sticky='w')
 
 			left_btn = ttk.Button(window, text="<", style='arrow.TButton', takefocus=False, command=move_left)
