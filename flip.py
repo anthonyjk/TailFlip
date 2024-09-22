@@ -45,6 +45,19 @@ class Flip:
 		"""
 		self.cards[card[0]] = card[1]
 
+	def replace_card(self, old_card, new_card):
+		"""
+		Replaces existing card in Flip
+
+		old_card: string with front_val of self.cards element
+		new_card: array of size 2, [front_val, back_val]
+		"""
+		print(old_card)
+		if old_card in list(self.cards.keys()):
+			print("RAN")
+			self.cards.pop(old_card)
+			self.cards[new_card[0]] = new_card[1]
+
 	def remove_card(self, card):
 		"""
 		Removes a card from the Flip
