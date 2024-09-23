@@ -83,6 +83,10 @@ def flip_customize_window():
 	"""
 	global window
 
+	if window != None:
+		if window.winfo_exists():
+			return
+
 	def pop_up_input():
 		"""
 		Creates text input window for new Flip creation
@@ -104,7 +108,7 @@ def flip_customize_window():
 			pop.destroy()
 
 		pop = tkinter.Toplevel(root)
-		pop.geometry(f"190x80+{root.winfo_x()+380}+{root.winfo_y()+75}")
+		pop.geometry(f"190x80+{window.winfo_x()+80}+{window.winfo_y()+65}")
 
 		input_text = tkinter.StringVar()
 		title = ttk.Entry(pop, width=25, textvariable=input_text)
@@ -117,9 +121,6 @@ def flip_customize_window():
 		cancel_button.grid(row=1, column=0, sticky='nwe', columnspan=2, padx=(10,0))
 
 		#pop.overrideredirect(True)
-
-	def delete_flip():
-		pass
 
 	word_list = None # To be accessed by both contents and create windows.
 	front_input = None
@@ -213,6 +214,8 @@ def flip_customize_window():
 
 					back_input.delete(0, tkinter.END)
 					back_input.insert(0, "")
+
+					save_current_flip(flips[name])
 			elif add_button.cget('text') == 'Update':
 				flips[name].replace_card(old_card, [front_text.get(), back_text.get()], replace_index)
 				word_list.delete(replace_index)
@@ -226,6 +229,8 @@ def flip_customize_window():
 				back_input.insert(0, "")
 
 				add_button.config(text='Add')
+
+				save_current_flip(flips[name])
 
 		def remove_card():
 			nonlocal old_card
@@ -241,6 +246,11 @@ def flip_customize_window():
 
 				add_button.config(text='Add')
 				old_card = ''
+
+				save_current_flip(flips[name])
+
+		def save_current_flip(flip):
+			fd.download_flip(flip)
 
 
 		if first_load:
@@ -275,13 +285,14 @@ def flip_customize_window():
 
 	select_i = -1
 	first_load = True # First load of contents_window and card_create_window
+	flip_name = ""
 	def on_select(event):
 		"""
 		Creates content and creation window of selected Flip from flip_list
 
 		event: tkinter event
 		"""
-		nonlocal select_i, first_load
+		nonlocal select_i, first_load, flip_name
 
 		widget = event.widget
 		if int(widget.curselection()[0]) != select_i: # Prevents unnecessary reloading
@@ -294,6 +305,23 @@ def flip_customize_window():
 			first_load = False
 
 			print(f"Selected {flip_name}")
+
+	def delete_flip():
+		global create, contents
+		nonlocal flip_name, select_i, index, first_load
+		# TODO: Make a "Are you sure?" pop-up
+
+		if flip_name != "":
+			flip_list.delete(select_i)
+			flips.pop(flip_name)
+			fd.delete_file(flip_name)
+			index -= 1
+			select_i = -1
+			first_load = True
+
+		if create != None and contents != None:
+			create.destroy()
+			contents.destroy()
 
 	def window_dragging(event):
 		"""

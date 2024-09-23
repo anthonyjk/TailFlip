@@ -4,9 +4,7 @@ from flip import Flip
 folder = "Flips"
 
 def download_flip(flip):
-	print('a')
 	if not os.path.exists(folder):
-		print('b')
 		os.makedirs(folder)
 
 	flip_name = flip.get_name()+".json"
@@ -30,7 +28,14 @@ def load_flips():
 				for c in card:
 					if len(c) > 0:
 						flip_data[f[:-5]].add_card(c.split(" : "))
-
 	return flip_data
 
+def delete_file(flip_name):
+	name = flip_name + '.json'
+	if os.path.exists(folder):
+		file_path = os.path.join(folder, name)
+		try:
+			os.remove(file_path)
+		except:
+			print("File does not exist.")
 
