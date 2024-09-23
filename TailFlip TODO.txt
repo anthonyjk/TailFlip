@@ -1,12 +1,13 @@
 TailFlip TODO
 
 - Rename & Delete existing Flips
+	- Delete from folder as well
 
+- Put Flip auto-save in better spot? (cards added/deleted?)
+
+- Fix Flip display issue when it falls to the very back of all windows
 - Scrollbar for Listboxes?
 	- (Technically can already scroll?)
-- Save & Load Feature for Flips
-	- Save when "Open Flip" is pressed?
-	- Load on launch from specified folder?
 - Fit longer text in flashcards (such as whole sentences).
 - Streamline word display menu listbox
 - Add card count to Flip display (ex: 3 / 17)
@@ -31,3 +32,4 @@ DONE
 - default to creating card after updating card
 - Dragging does not apply when entry box is focused
 - Delete Card option
+- Save & Load Feature for Flips

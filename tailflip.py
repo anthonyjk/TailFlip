@@ -2,6 +2,7 @@ import tkinter
 from tkinter import ttk
 import sv_ttk
 from flip import Flip
+import flips_data as fd
 
 flip = Flip('test')
 
@@ -17,6 +18,12 @@ def open_flip():
 	"""
 	Creates selection menu for Flip options to display
 	"""
+
+	# Saving current flips
+	for flip in flips.values():
+		fd.download_flip(flip)
+		print(flip)
+
 	global window, create, contents
 	def chosen_flip(event):
 		"""
@@ -29,6 +36,10 @@ def open_flip():
 		name = widget.get(s_i)
 
 		flips[name].flip_display(root, menu) # Deal with empty cards (dont display)
+
+	#def save_flips():
+	#	for flip in flips:
+	#		flip.save_contents()
 
 	try:
 		window.destroy()
@@ -203,19 +214,18 @@ def flip_customize_window():
 					back_input.delete(0, tkinter.END)
 					back_input.insert(0, "")
 			elif add_button.cget('text') == 'Update':
-				if old_card != '':
-					flips[name].replace_card(old_card, [front_text.get(), back_text.get()], replace_index)
-					word_list.delete(replace_index)
-					word_list.insert(replace_index, f'{front_text.get()} | {back_text.get()}')
+				flips[name].replace_card(old_card, [front_text.get(), back_text.get()], replace_index)
+				word_list.delete(replace_index)
+				word_list.insert(replace_index, f'{front_text.get()} | {back_text.get()}')
 
-					# Reset back to adding a card
-					front_input.delete(0, tkinter.END)
-					front_input.insert(0, "")
+				# Reset back to adding a card
+				front_input.delete(0, tkinter.END)
+				front_input.insert(0, "")
 
-					back_input.delete(0, tkinter.END)
-					back_input.insert(0, "")
+				back_input.delete(0, tkinter.END)
+				back_input.insert(0, "")
 
-					add_button.config(text='Add')
+				add_button.config(text='Add')
 
 		def remove_card():
 			nonlocal old_card
@@ -405,8 +415,9 @@ def root_dragging(event):
 	except:
 		pass
 
-root = tkinter.Tk()
+flips = fd.load_flips()
 
+root = tkinter.Tk()
 root.geometry("300x500")
 
 # Sun Valley ttk theme

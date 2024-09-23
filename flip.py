@@ -114,11 +114,11 @@ class Flip:
 			else:
 				front = not front # Flipping card
 
-	def save_contents(self):
+	def save_contents(self, file_path):
 		"""
 		Saves word contents to json file
 		"""
-		f = open(self.name+".json", "w")
+		f = open(file_path, "w")
 		for k in self.cards.keys():
 			f.write(f'{k} : {self.cards[k]}\n')
 
