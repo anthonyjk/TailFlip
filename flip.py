@@ -118,7 +118,7 @@ class Flip:
 		"""
 		Saves word contents to json file
 		"""
-		f = open(file_path, "w")
+		f = open(file_path, "w", encoding='utf-8')
 		for k in self.cards.keys():
 			f.write(f'{k} : {self.cards[k]}\n')
 
@@ -237,6 +237,7 @@ class Flip:
 			flashcard.grid(row=1, column=0, columnspan=4, sticky='nesw')
 
 			window.overrideredirect(True) # TODO: Add frame to let user resize flip.
+			window.wm_attributes("-topmost", True)
 			window.geometry("500x300+500+300")
 			window.bind('<Button-1>', save_click_position)
 			window.bind('<B1-Motion>', dragging)

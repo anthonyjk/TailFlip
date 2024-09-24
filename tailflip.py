@@ -22,7 +22,6 @@ def open_flip():
 	# Saving current flips
 	for flip in flips.values():
 		fd.download_flip(flip)
-		print(flip)
 
 	global window, create, contents
 	def chosen_flip(event):
@@ -55,8 +54,12 @@ def open_flip():
 	menu = tkinter.Toplevel(root)
 	menu.geometry('200x200')
 
+	menu.grid_columnconfigure(0, weight=1)
+	menu.grid_rowconfigure(0, weight=1)
+
 	flip_select = tkinter.Listbox(menu, exportselection=False)
-	flip_select.grid(sticky='nwes')
+	flip_select.grid(row=0,column=0,sticky='nwes')
+	flip_select.config(font=('Tahoma', 10), justify=tkinter.CENTER)
 
 	index = 0
 	for f in flips:
@@ -75,7 +78,6 @@ def create_flip(name):
 		flips[name] = Flip(name)
 	else:
 		print("Already exists") # Give an error message
-	print(flips)
 
 def flip_customize_window():
 	"""
@@ -170,13 +172,15 @@ def flip_customize_window():
 		try:
 			flip_label.config(text=name)
 		except:
-			flip_label = ttk.Label(contents, text=name)
+			style.configure('flip_name.TLabel', font=('Tahoma', 12))
+			flip_label = ttk.Label(contents, text=name, style='flip_name.TLabel')
 			flip_label.grid(row=0)
 
 		contents.grid_columnconfigure(0, weight=1)
 		contents.grid_rowconfigure(1, weight=1)
 		word_list = tkinter.Listbox(contents, exportselection=False)
 		word_list.grid(row=1, sticky='wnes')
+		word_list.config(font=('Tahoma', 10))
 
 		word_list.bind('<<ListboxSelect>>', word_select)
 
@@ -257,19 +261,22 @@ def flip_customize_window():
 			create = tkinter.Toplevel(window)
 			create.geometry(f"175x250+{root.winfo_x()+482}+{root.winfo_y()+280}")
 			create.overrideredirect(True)
+
+		create.grid_columnconfigure(0, weight=1)
+
 		front_text = tkinter.StringVar()
 		front_input = ttk.Entry(create, width=25, textvariable=front_text)
-		front_input.grid(row=0)
+		front_input.grid(row=0,column=0)
 
 		back_text = tkinter.StringVar()
 		back_input = ttk.Entry(create, width=25, textvariable=back_text)
-		back_input.grid(row=1)
+		back_input.grid(row=1,column=0)
 
 		add_button = ttk.Button(create, text="Add", command=add_new_card)
-		add_button.grid(row=2, sticky='we')
+		add_button.grid(row=2,column=0, sticky='we')
 
 		delete_button = ttk.Button(create, text="Delete", command=remove_card)
-		delete_button.grid(row=3, sticky='we')
+		delete_button.grid(row=3,column=0, sticky='we')
 
 		create.bind('<Button-1>', save_click_position)
 		create.bind('<B1-Motion>', window_dragging)
@@ -363,17 +370,18 @@ def flip_customize_window():
 	window.geometry(f"350x250+{root.winfo_x()+300}+{root.winfo_y()}")
 
 	window.grid_columnconfigure(0, weight=1)
+	window.grid_columnconfigure(1, weight=1)
 	window.grid_rowconfigure(1, weight=1)
-	window.grid_rowconfigure(2, weight=1)
 
 	create_button = ttk.Button(window, text='Create Flip', command=pop_up_input)
-	create_button.grid(row=0)
+	create_button.grid(row=0, column=0, sticky='we')
 
 	flip_delete_button = ttk.Button(window, text='Delete Flip', command=delete_flip)
-	flip_delete_button.grid(row=1)
+	flip_delete_button.grid(row=0, column=1, sticky='we')
 
 	flip_list = tkinter.Listbox(window, exportselection=False)
-	flip_list.grid(row=2, sticky='wes')
+	flip_list.grid(row=1, column=0, columnspan=2, sticky='nwes')
+	flip_list.config(font=('Tahoma', 12))
 
 	flip_list.bind('<<ListboxSelect>>', on_select)
 
@@ -451,7 +459,8 @@ root.geometry("300x500")
 # Sun Valley ttk theme
 sv_ttk.set_theme("dark")
 style = ttk.Style(root)
-style.configure('title.TLabel', font=('Helvetica', 36))
+style.configure('title.TLabel', font=('Forte', 36))
+style.configure('option.TButton', font=('Tahoma', 16))
 
 root.grid_rowconfigure(0, weight=1)
 root.grid_columnconfigure(0, weight=1)
@@ -463,11 +472,10 @@ root.grid_rowconfigure(2, weight=2)
 title_label = ttk.Label(text="TailFlip", style='title.TLabel')
 title_label.grid(row=0)
 
-button = ttk.Button(root, text="Open Flip", command=open_flip)
+button = ttk.Button(root, text="Open Flip", command=open_flip, style='option.TButton')
 button.grid(row=1, sticky='nwes')
 
-
-create_button = ttk.Button(root, text="Modify Flips", command=flip_customize_window)
+create_button = ttk.Button(root, text="Modify Flips", command=flip_customize_window, style='option.TButton')
 create_button.grid(row=2, sticky='nwes')
 
 #root.overrideredirect(True)

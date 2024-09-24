@@ -2,6 +2,8 @@ TailFlip TODO
 
 - Rename existing Flips
 
+- Character limit for Flip names (and cards?)
+	- character limit for max flip name limit: windows limit - 5 (because of .json)
 - Fix Flip display issue when it falls to the very back of all windows
 - Fit longer text in flashcards (such as whole sentences).
 - Streamline word display menu listbox

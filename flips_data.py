@@ -21,7 +21,7 @@ def load_flips():
 		for f in files:
 			if '.json' in f:
 				file_path = os.path.join(folder, f)
-				read = open(file_path, "r")
+				read = open(file_path, "r", encoding='utf-8')
 				card = read.read().split('\n')
 
 				flip_data[f[:-5]] = Flip(f[:-5])
