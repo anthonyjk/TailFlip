@@ -3,6 +3,7 @@ from tkinter import ttk
 import sv_ttk
 from flip import Flip
 import flips_data as fd
+import flip_visual as fv
 
 flip = Flip('test')
 
@@ -451,6 +452,9 @@ def root_dragging(event):
 	except:
 		pass
 
+def flip_visualize():
+	fv.visual_window(flips, root)
+
 flips = fd.load_flips()
 
 root = tkinter.Tk()
@@ -467,6 +471,7 @@ root.grid_columnconfigure(0, weight=1)
 
 root.grid_rowconfigure(1, weight=2)
 root.grid_rowconfigure(2, weight=2)
+root.grid_rowconfigure(3, weight=2)
 #root.grid_columnconfigure(1, weight=1)
 
 title_label = ttk.Label(text="TailFlip", style='title.TLabel')
@@ -477,6 +482,9 @@ button.grid(row=1, sticky='nwes')
 
 create_button = ttk.Button(root, text="Modify Flips", command=flip_customize_window, style='option.TButton')
 create_button.grid(row=2, sticky='nwes')
+
+visual_button = ttk.Button(root, text="Visualize Flips", command=flip_visualize, style='option.TButton')
+visual_button.grid(row=3, sticky='nwes')
 
 #root.overrideredirect(True)
 root.bind('<Button-1>', save_click_position)
